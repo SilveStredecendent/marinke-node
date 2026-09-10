@@ -19,7 +19,6 @@ function criar(dados) {
     throw new Error("nome e preco são obrigatórios");
   }
 
-  // 2. Aqui instanciamos a classe Model usando 'new Produto', igual ao Slide 16
   const produto = new Produto({
     id: produtos.length + 1,
     nome: dados.nome,

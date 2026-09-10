@@ -10,7 +10,6 @@ exports.buscarPorId = (req, res) => {
   const produto = service.buscarPorId(req.params.id);
 
   if (!produto) {
-    // Se não achar, devolve erro 404 de "Não Encontrado"[cite: 1]
     return res.status(404).json({ mensagem: "Produto não encontrado" });
   }
 
