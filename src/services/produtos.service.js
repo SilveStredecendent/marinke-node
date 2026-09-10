@@ -1,6 +1,9 @@
+
+const Produto = require("../models/produto.model");
+
 const produtos = [
-  { id: 1, nome: "Notebook", preco: 3500 },
-  { id: 2, nome: "Mouse", preco: 120 }
+  new Produto({ id: 1, nome: "Notebook", preco: 3500 }),
+  new Produto({ id: 2, nome: "Mouse", preco: 120 })
 ];
 
 function listar() {
@@ -16,11 +19,12 @@ function criar(dados) {
     throw new Error("nome e preco são obrigatórios");
   }
 
-  const produto = {
+  // 2. Aqui instanciamos a classe Model usando 'new Produto', igual ao Slide 16
+  const produto = new Produto({
     id: produtos.length + 1,
     nome: dados.nome,
     preco: dados.preco
-  };
+  });
 
   produtos.push(produto);
   return produto;

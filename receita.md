@@ -1,45 +1,76 @@
-**Passo 0**.
+## Passo 0: Instalação do Node.js (Ambiente Local)
 
-Sem ele instalado, o seu terminal nem sequer vai reconhecer comandos como `npm` ou `node`.
+*Caso utilize o GitHub Codespaces, pule este passo (o Node já vem instalado).*
 
-**Passo 0: Instalação do Node.js (Ambiente Local)**
+1. Acesse o site oficial ([nodejs.org](https://nodejs.org)) e baixe a versão **LTS**.
+2. Conclua a instalação padrão do instalador.
+3. Valide a presença das ferramentas no terminal:
 
-* **O que fazer:** Acessar o site oficial (nodejs.org) e baixar o instalador da versão LTS (Long Term Support), que é a mais recomendada e estável.
-* **Instalação:** No Windows, por exemplo, basta rodar o executável e seguir o padrão "Next, Next, Install". Ele já configura tudo automaticamente por baixo dos panos.
-* **Verificação:** Para ter certeza de que a instalação funcionou, basta abrir o PowerShell (ou o terminal da sua preferência) e digitar dois comandos:
-* `node -v` (para confirmar a versão do Node instalada)
-* `npm -v` (para confirmar que o gerenciador de pacotes veio junto)
+```bash
+   node -v
+   npm -v
+   
 
----
+```
 
-1. **Inicialização do Projeto (`npm init -y`)**
-* O primeiro passo em qualquer pasta de projeto Node.js é criar o arquivo gerador `package.json`.
-* **Comando no terminal:** `npm init -y`
-* **Explicação:** A flag `-y` responde "sim" para todas as perguntas padrão. Isso gera o arquivo de configuração raiz que gerenciará os scripts e as bibliotecas do seu projeto.
+## Passo 1: Inicialização do Projeto
 
----
+Crie e abra a pasta do projeto no terminal e execute:
 
-2. **Instalação das Dependências**
-* Você precisa instalar o framework web e a ferramenta de reinicialização automática.
-* **Comando no terminal:** `npm install express`
-* **Comando no terminal:** `npm install --save-dev nodemon`
-* **Explicação:** O Express construirá o servidor e as rotas. O Nodemon é instalado como dependência de desenvolvimento (`--save-dev`) para monitorar os arquivos e reiniciar o servidor automaticamente a cada vez que você salvar o código.
+```bash
+npm init -y
 
----
+```
 
-3. **Criação da Estrutura de Pastas e Arquivos**
-* Construa o esqueleto da arquitetura para separar as responsabilidades.
-* Crie uma pasta chamada `src` na raiz do projeto.
-* Dentro de `src`, crie três subpastas: `controllers`, `routes` e `services`.
-* Crie o arquivo principal `index.js` solto dentro da pasta `src`.
-* Crie os arquivos específicos de domínio dentro de cada subpasta (ex: `produto.service.js`, `produto.controller.js` e `produto.routes.js`).
+* **O que faz:** Gera o arquivo `package.json` com todas as configurações padrão confirmadas.
 
----
+## Passo 2: Instalação das Dependências
 
-4. **Configuração do Script de Execução**
-* É necessário ensinar o Node.js como iniciar o seu projeto utilizando o Nodemon.
-* Abra o arquivo `package.json`.
-* Localize o bloco `"scripts"` e adicione o comando `dev`:
+Instale o framework de roteamento e o utilitário de recarregamento automático:
+
+```bash
+npm install express
+npm install --save-dev nodemon
+
+```
+
+* **express:** Cria o servidor, middlewares e gerencia requisições HTTP.
+* **nodemon:** Reinicia a aplicação automaticamente ao salvar alterações no código.
+
+## Passo 3: Criação da Estrutura de Pastas e Arquivos
+
+Organize o projeto na pasta de código-fonte (`src`):
+
+```text
+marinke-node/
+├── package.json
+├── package-lock.json
+├── README.md
+└── src/
+    ├── index.js
+    ├── models/
+    │   └── produto.model.js
+    ├── services/
+    │   └── produtos.service.js
+    ├── controllers/
+    │   └── produto.controller.js
+    └── routes/
+        └── produto.routes.js
+
+```
+
+### Papel de cada pasta:
+
+* **`models/`:** Classes que definem a estrutura da entidade e comportamentos do domínio.
+* **`services/`:** Centraliza regras de negócio, persistência e validações.
+* **`controllers/`:** Converte requisições HTTP (`req`) em ações e responde com status e JSON (`res`).
+* **`routes/`:** Liga os verbos HTTP (GET, POST) e URLs aos métodos do Controller.
+* **`index.js`:** Ponto de entrada que liga o servidor Express na porta desejada.
+
+## Passo 4: Configuração do Script de Execução
+
+No arquivo `package.json`, aponte o Nodemon para a pasta `src`:
+
 ```json
 "scripts": {
   "dev": "nodemon src/index.js"
@@ -47,23 +78,148 @@ Sem ele instalado, o seu terminal nem sequer vai reconhecer comandos como `npm` 
 
 ```
 
+## Passo 5: Implementação do Código (De Dentro para Fora)
 
-* **Explicação:** Isso cria um atalho. Agora, ao pedir para rodar o ambiente de desenvolvimento, o Node.js saberá que deve acionar o Nodemon apontando exatamente para o arquivo que liga o servidor.
+### 1. O Model (`src/models/produto.model.js`)
 
----
+```javascript
+class Produto {
+  constructor({ id, nome, preco }) {
+    this.id = id;
+    this.nome = nome;
+    this.preco = preco;
+  }
 
-5. **Escrita do Código (De Dentro para Fora)**
-* A ordem ideal para programar as regras sem se perder é começar pelos dados e terminar na internet.
-* **Primeiro o Service:** Escreva o array de dados e as funções contendo a lógica e as validações (listar, buscar, criar).
-* **Depois o Controller:** Importe o Service e crie as funções que vão extrair dados de `req` e responder através do `res`.
-* **Em seguida as Routes:** Importe o Controller e conecte os verbos HTTP (GET, POST) aos métodos do Controller.
-* **Por fim o Index:** Importe o Express, ative o recebimento de JSON (`app.use(express.json())`), importe as rotas, defina a porta e ative o `app.listen()`.
+  estaEmPromocao() {
+    return this.preco < 100;
+  }
+}
 
----
+module.exports = Produto;
 
-6. **Execução e Testes**
-* Com o código salvo, você inicializa o servidor.
-* **Comando no terminal:** `npm run dev`
-* **Explicação:** O terminal informará que o servidor está rodando. A partir deste momento, você pode abrir o navegador para testar requisições GET ou abrir o Thunder Client para testar requisições POST. Qualquer alteração nos arquivos `src` será aplicada instantaneamente pelo Nodemon.
+```
 
----
+### 2. O Service (`src/services/produtos.service.js`)
+
+```javascript
+const Produto = require("../models/produto.model");
+
+const produtos = [
+  new Produto({ id: 1, nome: "Notebook", preco: 3500 }),
+  new Produto({ id: 2, nome: "Mouse", preco: 120 })
+];
+
+function listar() {
+  return produtos;
+}
+
+function buscarPorId(id) {
+  return produtos.find(p => p.id === Number(id));
+}
+
+function criar(dados) {
+  if (!dados.nome || dados.preco == null) {
+    throw new Error("nome e preco são obrigatórios");
+  }
+
+  const produto = new Produto({
+    id: produtos.length + 1,
+    nome: dados.nome,
+    preco: dados.preco
+  });
+
+  produtos.push(produto);
+  return produto;
+}
+
+module.exports = { listar, buscarPorId, criar };
+
+```
+
+### 3. O Controller (`src/controllers/produto.controller.js`)
+
+```javascript
+const service = require("../services/produtos.service");
+
+exports.listar = (req, res) => {
+  const produtos = service.listar();
+  res.status(200).json(produtos);
+};
+
+exports.buscarPorId = (req, res) => {
+  const produto = service.buscarPorId(req.params.id);
+
+  if (!produto) {
+    return res.status(404).json({ mensagem: "Produto não encontrado" });
+  }
+
+  res.status(200).json(produto);
+};
+
+exports.criar = (req, res) => {
+  try {
+    const produto = service.criar(req.body);
+    res.status(201).json(produto);
+  } catch (error) {
+    res.status(400).json({ mensagem: error.message });
+  }
+};
+
+```
+
+### 4. As Routes (`src/routes/produto.routes.js`)
+
+```javascript
+const express = require("express");
+const router = express.Router();
+const controller = require("../controllers/produto.controller");
+
+router.get("/", controller.listar);
+router.get("/:id", controller.buscarPorId);
+router.post("/", controller.criar);
+
+module.exports = router;
+
+```
+
+### 5. O Index (`src/index.js`)
+
+```javascript
+const express = require("express");
+const produtoRoutes = require("./routes/produto.routes");
+
+const app = express();
+
+app.use(express.json());
+app.use("/produtos", produtoRoutes);
+
+app.listen(3000, () => {
+  console.log("Servidor rodando na porta 3000!");
+});
+
+```
+
+## Passo 6: Execução e Testes
+
+1. No terminal do projeto, execute:
+
+```bash
+   npm run dev
+   
+
+```
+
+2. **Testar GET (Listagem):** Abra no navegador `http://localhost:3000/produtos`.
+3. **Testar GET por ID:** Acesse `http://localhost:3000/produtos/1`.
+4. **Testar POST (Criação):** No Thunder Client, envie um `POST` para `http://localhost:3000/produtos` com o corpo JSON:
+
+```json
+   {
+     "nome": "Monitor Gamer",
+     "preco": 1350
+   }
+   
+
+```
+
+*Retorno esperado: Status 201 Created com os dados do novo produto instanciado pelo Model.*
