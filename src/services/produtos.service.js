@@ -1,4 +1,3 @@
-
 const Produto = require("../models/produto.model");
 
 const produtos = [
