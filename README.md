@@ -47,8 +47,7 @@ marinke-node/
 1. Instale as dependências:
 
 ```bash
-   npm install
-   
+   npm install 
 
 ```
 
@@ -56,7 +55,6 @@ marinke-node/
 
 ```bash
    npm run dev
-   
 
 ```
 
@@ -94,9 +92,5 @@ O servidor estará ativo em: `http://localhost:3000`.
   "nome": "Teclado Mecânico",
   "preco": 250
 }
-
-```
-
-```
 
 ```
