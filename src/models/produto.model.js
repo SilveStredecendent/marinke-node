@@ -9,3 +9,5 @@ class Produto {
     return this.preco < 100;
   }
 }
+
+module.exports = Produto;

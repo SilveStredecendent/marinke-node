@@ -1,11 +1,11 @@
 {
-  "devDependencies": {
-    "nodemon": "^3.1.14"
-  },
   "name": "marinke-node",
   "version": "1.0.0",
   "description": "API REST simples desenvolvida para a disciplina de Projeto Integrador, aplicando arquitetura em camadas com manipulação de dados em memória.",
-  "main": "index.js",
+  "main": "src/index.js",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
   "dependencies": {
     "anymatch": "^3.1.3",
     "balanced-match": "^4.0.4",
@@ -37,7 +37,7 @@
     "undefsafe": "^2.0.5"
   },
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
